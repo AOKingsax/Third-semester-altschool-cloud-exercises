@@ -78,3 +78,54 @@ It is setting up the environment and will take 30secs to 1mins to finish up.
 - Click on EC2
 
 ![a8](./snaps/a8.jpg)
+
+Click on launch instance
+
+![a9](./snaps/a9.jpg)
+
+- Write the name of the instance
+- Choose ubuntu Amazon Machine Image (AMI)
+
+![a10](./snaps/a10.jpg)
+
+Choose Ubuntu 20.04 LTS focal image
+
+![a11](./snaps/a11.jpg)
+
+Select a key pair, i have one already which is key.pem. You can generate by clicking the 'Create new key pair" and selecting it after it has been created.
+
+![a12](./snaps/a12.jpg)
+
+Select the VPC that was created earlier and not the default
+
+![a13](./snaps/a14.jpg)
+
+In the subnet section, select the public subnet, as this EC2 will serve as our bastion host.
+
+![a14](./snaps/a14.jpg)
+
+- Enable IP address as we will ssh into it
+- Create a security group
+- Provide a name for the security group
+
+![a15](./snaps/a15.jpg)
+
+Set the security group to allow inbound protocol for ssh, http, and https and lauch instance
+
+![a16](./snaps/a16.jpg)
+
+![a17](./snaps/a17.jpg)
+
+We launch another instance for the private subnet. Here we give it a name and select Ubuntu AMI
+
+![a18](./snaps/a18.jpg)
+
+- We select our defined logical VPC
+- Select the private subnet in us-east-1a
+- Disable IP address as we don't want it to have direct access to the internet
+- From the "Select existing security group" we select the security group we created earlier
+- launch instance
+
+![a19](./snaps/a19.jpg)
+
+Create another instance using this step and assign it to a private subnet with no public IP address
