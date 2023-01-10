@@ -1,4 +1,4 @@
-## Project Overview
+## PROJECT OVERVIEW
 
 Amazon Virtual Private Cloud (Amazon VPC) enables you to launch AWS resources into a virtual network that you’ve defined. A subnet is a range of IP addresses within the VPC. Subnets can be either public with a gateway to the internet or private.
 
@@ -129,3 +129,5 @@ We launch another instance for the private subnet. Here we give it a name and se
 ![a19](./snaps/a19.jpg)
 
 Create another instance using this step and assign it to a private subnet with no public IP address
+
+## 3. Deploy Nginx Web Server with Ansible
