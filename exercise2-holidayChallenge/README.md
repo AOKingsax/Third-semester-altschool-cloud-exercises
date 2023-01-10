@@ -8,13 +8,21 @@ Naturally private subnets are more secure, as the management ports aren’t expo
 
 Instances within the same VPC can connect to one another via their private IP addresses, as such it is possible to connect to an instance in a private subnet from an instance in a public subnet; otherwise known as a bastion host.
 
-In this project, the use of an instance as a bastion host will be used to access two private instances in two private subnets and configure nginx web server in them using ansible configuration tool. It will be attached to a NAT gateway in a public subnet in order to access internet and a load balancer will be attached to direct traffic accross the private instances.
+In this project, the use of an instance as a bastion host will be used to access two private instances in two private subnets and configure nginx web server in them using ansible configuration tool. It will be attached to a NAT gateway in a public subnet in order to access internet and a load balancer will be attached together with a target group to direct traffic accross the private instances.
+
+### Application Load Balancer
+
+A load balancer serves as the single point of contact for clients. The load balancer distributes incoming application traffic across multiple targets, such as EC2 instances, in multiple Availability Zones. This increases the availability of your application.
+
+### Target Groups
+
+A target group tells a load balancer where to direct traffic to : EC2 instances, fixed IP addresses; or AWS Lambda functions, amongst others. When creating a load balancer, you create one or more listeners and configure listener rules to direct the traffic to one target group.
 
 ## TASKS
 
-- Set up 2 EC2 instances on AWS(use the free tier instances)
-- Deploy an Nginx web server on these instances(you are free to use Ansible)
-- Set up an ALB(Application Load balancer) to route requests to your EC2 instances
+- Set up two EC2 instances on AWS (use the free tier instances)
+- Deploy an Nginx web server on these instances (you are free to use Ansible)
+- Set up an ALB (Application Load balancer) to route requests to your EC2 instances
 - Make sure that each server displays its own Hostname or IP address. You can use any programming language of your choice to display this.
 
 ### Important points to note:
