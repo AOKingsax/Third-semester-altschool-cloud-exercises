@@ -10,11 +10,7 @@ Instances within the same VPC can connect to one another via their private IP ad
 
 In this project, the use of an instance as a bastion host will be used to access two private instances in two private subnets and configure nginx web server in them using ansible configuration tool. It will be attached to a NAT gateway in a public subnet in order to access internet and a load balancer will be attached together with a target group to direct traffic accross the private instances.
 
-### Application Load Balancer
-
 A load balancer serves as the single point of contact for clients. The load balancer distributes incoming application traffic across multiple targets, such as EC2 instances, in multiple Availability Zones. This increases the availability of your application.
-
-### Target Groups
 
 A target group tells a load balancer where to direct traffic to : EC2 instances, fixed IP addresses; or AWS Lambda functions, amongst others. When creating a load balancer, you create one or more listeners and configure listener rules to direct the traffic to one target group.
 
@@ -131,3 +127,125 @@ We launch another instance for the private subnet. Here we give it a name and se
 Create another instance using this step and assign it to a private subnet with no public IP address
 
 ## 3. Deploy Nginx Web Server with Ansible
+
+We will ssh into our instance in the public subnet whhich serve as our bastion host and will also be our ansible master to automate the deployment to the instances in the private subnet.
+
+- Go to instances
+- Click on the mark button of the nginxConnect server that is in public subnet and select connect as shown with the arrow
+
+![b1](./snaps/b1.jpg)
+
+Copy the link that is pointed by the arrow
+
+![b2](./snaps/b2.jpg)
+
+- Open a terminal, here i used powershell
+- Make sure you are in the folder that contains the private key as shown by the arrow. Mine is key.pem
+- Paste the copied ssh link
+
+![b3](./snaps/b3.jpg)
+
+- We are logged in into the bastion host
+- so we copy the private key into our EC2 in order to enable us have an ssh connection into the private instances
+- Run the command: nano key.pem; and paste the copied private key
+- Run the command: chmod 400 key.pem; to give read priviledges only to the current user
+- Run the command: ls -al; you can see where the arrow is pointing, it shows that only the current user has read permission for key.pem file
+
+![b4](./snaps/b4.jpg)
+
+- When we ssh into our private instances, we will copy and paste the ssh public key of our bastion host into the authorized_keys of the private instances in order to allow ansible to access them
+- So we generate the bastion host ssh key by running the command: ssh-keygen
+- You leave all the option as defaults by clicking enter
+- The key is generated and is been stored in the .ssh folder
+
+![b5](./snaps/b5.jpg)
+
+- We cd into the .ssh folder
+- Cat the id_rsa.pub file and copy it's content
+
+![b6](./snaps/b6.jpg)
+
+- Go back to console and click on connect for one of the private instances following the previous procedure
+- Then copy the ssh link and paste it on the bastion host EC2 terminal and click enter
+
+![b7](./snaps/b7.jpg)
+
+- We have ssh into the private instance as it shows the private IP address of the private instance
+- You cd into .ssh folder
+- Run the command: nano authorized_keys
+- Paste the copied id_rsa.pub key into the file and save
+
+![b8](./snaps/b8.jpg)
+
+- Run the command: exit; to exit the private instance and back to the bastion host
+- Run the command: sudo apt update; sudo apt upgrade -y; to update cached and upgrade the package repository
+
+![b9](./snaps/b9.jpg)
+
+Run the command: sudo apt install ansible -y; to install ansible and its dependencies
+
+![b9a](./snaps/b9a.jpg)
+
+- The first file to create is our ansible.cfg file
+- Run the command: nano ansible.cfg
+
+![b10](./snaps/b10.jpg)
+
+Paste this content on it and save
+
+![b11](./snaps/b11.jpg)
+
+- Run the command: nano servers; this is where we put the IP address of the servers we want to reach and is known as host inventory
+- When you cat the servers file, you will see our two private instance IP address are shown
+
+![b12](./snaps/b12.jpg)
+
+For us to test if we can ping the two private instances, we run the command: ansible all -i servers -m ping; the connection to the instances were successful
+
+![b13](./snaps/b13.jpg)
+
+- We create our playbook to deploy the nginx server that will the display the private IP address of the instances
+- Run the command: ansible-galaxy init nginx; this creates the nginx role
+
+![b14](./snaps/b14.jpg)
+
+We nano into the main.yml file inside tasks folder of nginx role
+
+![b15](./snaps/b15.jpg)
+
+- We paste this script into it
+- Note the tag that the arrow is pointing to, we will use only that task and not the whole script to restart our nginx server later on whenever it is unhealthy
+
+![b16](./snaps/b16.jpg)
+
+We nano into the main.yml file inside the handler folder of nginx role
+
+![b17](./snaps/b17.jpg)
+
+- We paste the this script into it
+- This will start our nginx server after it has been installed
+
+![b18](./snaps/b18.jpg)
+
+We nano into the main.yml file inside the vars folder of the nginx role
+
+![b19](./snaps/b19.jpg)
+
+Paste this path into it as it will be called and read by our main.yml file in the tasks folder we created earlier that will send h1 tag into this path
+
+![b20](./snaps/b20.jpg)
+
+- We create the final playbook which will run all the scripts we have created earlier
+- Run the command: nano push.yml
+
+![b21](./snaps/b21.jpg)
+
+Paste this script into it and save
+
+![b22](./snaps/b22.jpg)
+
+- Run the command: ansible-playbook -i servers deploy.yml
+- This will connect to the private servers and carry out all the tasks in our playbook scripts
+- After running, you see in the PLAY RECAP, there was 4 was changed, 5 was ok, and no other failures or issues
+
+![b23](./snaps/b23.jpg)
