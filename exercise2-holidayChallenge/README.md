@@ -246,6 +246,120 @@ Paste this script into it and save
 
 - Run the command: ansible-playbook -i servers deploy.yml
 - This will connect to the private servers and carry out all the tasks in our playbook scripts
-- After running, you see in the PLAY RECAP, there was 4 was changed, 5 was ok, and no other failures or issues
+- After running, you see in the PLAY RECAP, there was 4 changes, 5 was ok, and no other failures or issues
 
 ![b23](./snaps/b23.jpg)
+
+## 4. Create a Target Group
+
+Click on target group as shown by the arrow
+
+![c1](./snaps/c1.jpg)
+
+Navigate to Target Group and click on create Target Group
+
+![c2](./snaps/c2.jpg)
+
+Choose instances as your target type
+
+![c3](./snaps/c3.jpg)
+
+- Give your target group a name
+- Select the VPC you have already created on the drop down menu and leave the default protocol on Http
+- Click on next
+
+![c4](./snaps/c4.jpg)
+
+Then select the Private instances in your VPC
+
+![c5](./snaps/c5.jpg)
+
+Click on create target group
+
+![c6](./snaps/c6.jpg)
+
+Currently there is no load balancer configured to this target group. Click on the None associated and select associate with a new load balancer
+
+![c7](./snaps/c7.jpg)
+
+## 5. Create an Application Load Balancer
+
+Give your Application Load Balancer a name
+
+![c8](./snaps/c8.jpg)
+
+Then on Network Mapping select your VPC
+
+![c9](./snaps/c9.jpg)
+
+Choose your public subnets associated with your VPC
+
+![c10](./snaps/c10.jpg)
+
+For the Security Groups click on create new security group
+
+![c11](./snaps/c11.jpg)
+
+Give your Security Group a name, brief description and ensure you choose your created VPC from the drop down menu
+
+![c12](./snaps/c12.jpg)
+
+Edit the Inbound rules to allow Http and Https traffic from anywhere and leave Outbound rules on default. Then click on create and return to the previous page to assign the newly created Security Group
+
+![c13](./snaps/c13.jpg)
+
+On the Listeners and routing section, select the target group previously created, leaving the rest of the configuration on default and finally click on create load balancers
+
+![c14](./snaps/c14.jpg)
+
+## 6. Configuring Application Load Balancer Security Group
+
+Click on security group as shown by the arrow
+
+![c15](./snaps/c15.jpg)
+
+Select the security group that is associated with your instances
+
+![c16](./snaps/c16.jpg)
+
+Go to edit inbound rules
+
+![c17](./snaps/c17.jpg)
+
+Edit the inbound rules to allow traffic on only the load balancer by selecting the Security Group that is associated with the load balancer. Then save the rules
+
+![c18](snaps/c18.jpg)
+
+In order to check for the health status of the private instances
+
+- Click on target group as shown by arrow 1
+- Mark the button for target group associated with our load balancer as shown by arrow 2
+- Check if the status of the target group is healthy or unhealthy as shown by arrow 3
+
+![c18a](./snaps/c18a.jpg)
+
+If it is unhealthy, you restart the nginx server
+
+- SSH into the bastion host as we did earlier
+- Run the command: ansible-playbook -i servers push.yml --tags restart
+- Remember earlier when we were writing the playbook to deploy the nginx server, we included a tag in the restart task
+
+![c18b](./snaps/c18b.jpg)
+
+Click on Load Balancer
+
+![c19](./snaps/c19.jpg)
+
+Copy the DNS name of our load balancer and paste on a web browser
+
+![c20](./snaps/c20.jpg)
+
+The Load Balancer has pointed to one of the private server
+
+![c21](./snaps/c21.jpg)
+
+When you reload the page again after some minutes, the Load Balancer will point to the other private server
+
+![c22](./snaps/c22.jpg)
+
+### THANKS FOR GOING THROUGH THE SEVERAL STEPS
