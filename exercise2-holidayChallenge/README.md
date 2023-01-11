@@ -256,7 +256,7 @@ Click on target group as shown by the arrow
 
 ![c1](./snaps/c1.jpg)
 
-Navigate to Target Group and click on create Target Group
+Click on create Target Group
 
 ![c2](./snaps/c2.jpg)
 
@@ -274,7 +274,8 @@ Then select the Private instances in your VPC
 
 ![c5](./snaps/c5.jpg)
 
-Click on create target group
+- Select include as pending as shown by the arrow
+- Click on create target group
 
 ![c6](./snaps/c6.jpg)
 
@@ -288,7 +289,7 @@ Give your Application Load Balancer a name
 
 ![c8](./snaps/c8.jpg)
 
-Then on Network Mapping select your VPC
+Then on Network Mapping select your VPC from the dropdown menu
 
 ![c9](./snaps/c9.jpg)
 
