@@ -13,7 +13,7 @@ Deploying a simple webpage showing Africa/Lagos timezone and hostname ip address
 Execute the bashscript file "create.sh" to deploy the terraform and ansible scripts.  
 After deploying, the load balancer should point to the three servers showing the current time and private ip address
 
-![a1](image/a1.jpg)
+![a1](./image/ai.jpg)
 
 ![a2](image/a2.jpg)
 
