@@ -1,0 +1,2 @@
+Load Balancer DNS = my-lb-tf-802816020.us-east-1.elb.amazonaws.com
+Domain name URL = terraform-test.kingsax.me
